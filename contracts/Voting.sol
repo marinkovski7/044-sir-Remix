@@ -1,0 +1,28 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+pragma solidity ^0.8.0;
+
+contract Wallet {
+    address public owner;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner can call this function.");
+        _;
+    }
+
+    function transfer(address payable _to, uint256 _amount) public onlyOwner {
+        require(_to != address(0), "Invalid address.");
+        require(address(this).balance >= _amount, "Insufficient balance.");
+        _to.transfer(_amount);
+    }
+
+    function deposit() public payable {}
+
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+}
